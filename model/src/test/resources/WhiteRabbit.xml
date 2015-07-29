@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:WRFile xmlns:tns="http://www.d80harri.net/wr/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.d80harri.net/wr/model ../../main/resources/WhiteRabbit.xsd ">
+
+	<tns:Task id="1">
+		<tns:Task id="1">
+
+		</tns:Task>
+	</tns:Task>
+
+</tns:WRFile>

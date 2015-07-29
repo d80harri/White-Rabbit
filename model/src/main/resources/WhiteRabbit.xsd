@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.d80harri.net/wr/model"
+	xmlns:tns="http://www.d80harri.net/wr/model" elementFormDefault="qualified">
+
+	<element name="WRFile" type="tns:WRFile">
+		<key name="taskId">
+			<selector xpath=".//tns:Task" />
+			<field xpath="@id" />
+		</key>
+	</element>
+
+	<complexType name="WRFile">
+		<sequence minOccurs="0" maxOccurs="1">
+			<element name="Task" type="tns:Task" />
+		</sequence>
+	</complexType>
+
+
+	<complexType name="Task">
+		<sequence minOccurs="0" maxOccurs="unbounded">
+			<element name="Task" type="tns:Task" />
+		</sequence>
+
+		<attribute name="id" type="long" />
+		<attribute name="title" type="string" />
+	</complexType>
+
+
+</schema>
