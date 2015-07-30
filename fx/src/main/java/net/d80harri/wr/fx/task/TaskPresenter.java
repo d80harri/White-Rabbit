@@ -1,16 +1,14 @@
 package net.d80harri.wr.fx.task;
 
-import net.d80harri.wr.fx.core.PresenterBase;
-import net.d80harri.wr.model.Task;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class TaskPresenter extends PresenterBase<ITaskView<?>, Task, TaskPresenter> {
+import javafx.fxml.Initializable;
 
-	public TaskPresenter(Task task) {
-		super(task);
-	}
+public class TaskPresenter implements Initializable {
 
 	@Override
-	protected void modelChanged(ITaskView view) {
+	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		
 	}
