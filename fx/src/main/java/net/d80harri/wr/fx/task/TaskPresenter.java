@@ -38,5 +38,10 @@ public class TaskPresenter implements Initializable {
 	private void debug(ActionEvent evt) {
 		System.out.println(task.getTitle());
 	}
+	
+	@FXML
+	private void addChild(ActionEvent evt) {
+		
+	}
 
 }
