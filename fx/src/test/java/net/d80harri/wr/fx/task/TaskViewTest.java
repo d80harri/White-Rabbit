@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -29,23 +30,23 @@ public class TaskViewTest extends ApplicationTest {
 		clickOn("#title");
 		
 		write("My new Task");
-		Assert.assertEquals("My new Task", presenter.getTask().getTitle());
+		Assertions.assertThat(presenter.getTask().getTitle()).isEqualTo("My new Task");
 		
 		push(KeyCode.CONTROL, KeyCode.A);
 	    push(KeyCode.DELETE);
 		write("My very new Task");
-		Assert.assertEquals("My very new Task", presenter.getTask().getTitle());
+		Assertions.assertThat(presenter.getTask().getTitle()).isEqualTo("My very new Task");
     }
 	
 	@Test
 	public void addingAChild() {
 		clickOn("#itemMenu");
 		clickOn("#addChild");
-		Assert.assertEquals(1, presenter.getTask().getTask().size());
+		Assertions.assertThat(presenter.getTask().getTask()).hasSize(1);
 		
 		clickOn("#itemMenu");
 		clickOn("#addChild");
-		Assert.assertEquals(2, presenter.getTask().getTask().size());
+		Assertions.assertThat(presenter.getTask().getTask()).hasSize(2);
 	}
 
 }
