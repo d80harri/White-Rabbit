@@ -11,16 +11,32 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
-
-<AnchorPane id="AnchorPane" minHeight="180.0" prefHeight="490.0"
-	prefWidth="819.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.d80harri.wr.fx.task.TaskPresenter">
-	<BorderPane>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.Border?>
+<?import javafx.scene.layout.Background?>
+ 
+<AnchorPane id="AnchorPane" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+	styleClass="airpad" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="net.d80harri.wr.fx.task.TaskPresenter">
+	<BorderPane minHeight="20" AnchorPane.bottomAnchor="0.0"
+		AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+		AnchorPane.topAnchor="0.0">
 		<center>
-			<TextField fx:id="taskTitle" id="title"/>
+			<TextField fx:id="ctlTaskTitle" id="title" promptText="What do you want to do?" />
 		</center>
+		<right>
+			<MenuButton id="itemMenu" maxWidth="20">
+				<items>
+					<MenuItem text="Add child" onAction="#addChild" id="addChild" />
+					<MenuItem text="Debug" onAction="#debug" />
+				</items>
+			</MenuButton>
+		</right>
 		<bottom>
-			<Button text="Debug" onAction="#debug" />
+			<AnchorPane fx:id="ctlSubtaskList" id="subTaskList" prefHeight="0" />
 		</bottom>
 	</BorderPane>
 </AnchorPane>
