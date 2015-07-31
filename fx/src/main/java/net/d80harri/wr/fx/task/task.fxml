@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane id="AnchorPane" minHeight="180.0" prefHeight="490.0"
+	prefWidth="819.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.d80harri.wr.fx.task.TaskPresenter">
+	<BorderPane>
+		<center>
+			<TextField fx:id="taskTitle" id="title"/>
+		</center>
+		<bottom>
+			<Button text="Debug" onAction="#debug" />
+		</bottom>
+	</BorderPane>
+</AnchorPane>

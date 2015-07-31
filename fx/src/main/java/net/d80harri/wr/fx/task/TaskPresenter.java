@@ -1,18 +1,42 @@
 package net.d80harri.wr.fx.task;
 
-import net.d80harri.wr.fx.core.PresenterBase;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
 import net.d80harri.wr.model.Task;
 
-public class TaskPresenter extends PresenterBase<ITaskView<?>, Task, TaskPresenter> {
+public class TaskPresenter implements Initializable {
 
-	public TaskPresenter(Task task) {
-		super(task);
+	private StringProperty title = new SimpleStringProperty();
+	
+	@FXML
+	private TextField taskTitle;
+	
+	private Task task = new Task();
+	
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		this.title.bind(taskTitle.textProperty());
+		installTaskTitleListener();
+	}
+	
+	public Task getTask() {
+		return task;
 	}
 
-	@Override
-	protected void modelChanged(ITaskView view) {
-		// TODO Auto-generated method stub
-		
+	private void installTaskTitleListener() {
+		title.addListener((obs, ov, nv) -> task.setTitle(nv));
+	}
+	
+	@FXML
+	private void debug(ActionEvent evt) {
+		System.out.println(task.getTitle());
 	}
 
 }
