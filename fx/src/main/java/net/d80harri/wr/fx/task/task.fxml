@@ -15,28 +15,28 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.geometry.Insets?>
-
-<AnchorPane id="AnchorPane" minHeight="180.0" prefHeight="490.0"
-	prefWidth="819.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.d80harri.wr.fx.task.TaskPresenter">
-	<VBox minHeight="0" >
-		<BorderPane minHeight="20" >
-			<center>
-				<TextField fx:id="ctlTaskTitle" id="title" />
-			</center>
-			<right>
-				<MenuButton id="itemMenu">
-					<items>
-						<MenuItem text="Add child" onAction="#addChild" id="addChild" />
-						<MenuItem text="Debug" onAction="#debug" />
-					</items>
-				</MenuButton>
-			</right>
-		</BorderPane>
-		<AnchorPane fx:id="ctlSubtaskList" id="subTaskList" minHeight="0.0"
-			minWidth="0.0" prefHeight="0">
-		</AnchorPane>
-	</VBox>
-
-
+<?import javafx.scene.layout.Border?>
+<?import javafx.scene.layout.Background?>
+ 
+<AnchorPane id="AnchorPane" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+	styleClass="airpad" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="net.d80harri.wr.fx.task.TaskPresenter">
+	<BorderPane minHeight="20" AnchorPane.bottomAnchor="0.0"
+		AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+		AnchorPane.topAnchor="0.0">
+		<center>
+			<TextField fx:id="ctlTaskTitle" id="title" promptText="What do you want to do?" />
+		</center>
+		<right>
+			<MenuButton id="itemMenu" maxWidth="20">
+				<items>
+					<MenuItem text="Add child" onAction="#addChild" id="addChild" />
+					<MenuItem text="Debug" onAction="#debug" />
+				</items>
+			</MenuButton>
+		</right>
+		<bottom>
+			<AnchorPane fx:id="ctlSubtaskList" id="subTaskList" prefHeight="0" />
+		</bottom>
+	</BorderPane>
 </AnchorPane>

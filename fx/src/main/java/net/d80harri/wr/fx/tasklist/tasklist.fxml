@@ -15,10 +15,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" minHeight="180.0" prefHeight="490.0"
-	prefWidth="819.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8"
+<AnchorPane id="TaskList" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.d80harri.wr.fx.tasklist.TaskListPresenter">
-	<VBox fx:id="items">
+	<VBox fx:id="items" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 		<Button text="Debug" onAction="#debug" />
 	</VBox>
 </AnchorPane>
