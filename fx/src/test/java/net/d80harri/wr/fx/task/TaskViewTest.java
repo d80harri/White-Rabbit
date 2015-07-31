@@ -46,7 +46,6 @@ public class TaskViewTest extends ApplicationTest {
 		clickOn("#itemMenu");
 		clickOn("#addChild");
 		Assert.assertEquals(2, presenter.getTask().getTask().size());
-		
 	}
 
 }

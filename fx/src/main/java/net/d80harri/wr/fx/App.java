@@ -3,7 +3,6 @@ package net.d80harri.wr.fx;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.d80harri.wr.fx.task.TaskView;
 
 import com.airhacks.afterburner.injection.Injector;
 
@@ -11,7 +10,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        TaskView appView = new TaskView();
+        AppView appView = new AppView();
 //    	TaskListView appView = new TaskListView();
         Scene scene = new Scene(appView.getView());
         stage.setTitle("White rabbit v0.0.1");

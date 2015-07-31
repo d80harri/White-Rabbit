@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import net.d80harri.wr.fx.debug.DebugBus;
+import net.d80harri.wr.fx.debug.DebugEvent;
 import net.d80harri.wr.fx.tasklist.TaskListPresenter;
 import net.d80harri.wr.fx.tasklist.TaskListView;
 import net.d80harri.wr.model.Task;
@@ -24,40 +26,39 @@ public class TaskPresenter implements Initializable {
 
 	private TaskListView viewTaskList;
 	private TaskListPresenter presTaskList;
-	
+
 	// ====== Model properties ======
 	private Task model;
 	private StringProperty modelTitle;
 	private ObservableList<Task> modelSubtasks;
 
-
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.model = new Task();
-		
+
 		initializeModel();
 		initializeViews();
 		initializeControls();
 
 		bindModelToControls();
-		bindViewsToModel();	
+		bindViewsToModel();
 		bindModelPropertiesToModel();
 	}
-	
+
 	private void initializeModel() {
 		this.modelTitle = new SimpleStringProperty();
 		this.modelSubtasks = FXCollections.observableArrayList();
 	}
-	
+
 	private void initializeViews() {
 		viewTaskList = new TaskListView();
 		presTaskList = (TaskListPresenter) viewTaskList.getPresenter();
 	}
-	
+
 	private void initializeControls() {
 		ctlSubtaskList.getChildren().add(viewTaskList.getView());
 	}
-	
+
 	private void bindModelToControls() {
 		this.modelTitle.bindBidirectional(ctlTaskTitle.textProperty());
 	}
@@ -69,7 +70,7 @@ public class TaskPresenter implements Initializable {
 	private void bindModelPropertiesToModel() {
 		modelTitle.addListener((obs, ov, nv) -> model.setTitle(nv));
 	}
-	
+
 	public Task getTask() {
 		return model;
 	}
@@ -82,21 +83,22 @@ public class TaskPresenter implements Initializable {
 
 	@FXML
 	private void debug(ActionEvent evt) {
-		System.out.println(model.hashCode() + " " + model.getTitle());
+		DebugBus.getInstance().fireDebugEvent(
+				new DebugEvent(model.hashCode() + " " + model.getTitle()));
 		for (Task t : model.getTask()) {
-			System.out.println(" " + t.hashCode() + " " + t.getTitle());
+			DebugBus.getInstance().fireDebugEvent(
+					new DebugEvent(" " + t.hashCode() + " " + t.getTitle()));
 		}
 	}
 
 	@FXML
 	private void addChild(ActionEvent evt) {
 		Task newTask = new Task();
-		System.out.println("Adding task " + newTask.hashCode() + " to "
-				+ model.hashCode());
+		DebugBus.getInstance().fireDebugEvent(
+				new DebugEvent("Adding task " + newTask.hashCode() + " to "
+						+ model.hashCode()));
 		model.getTask().add(newTask);
 		modelSubtasks.add(newTask);
 	}
-
-
 
 }
