@@ -22,7 +22,7 @@
 	<VBox minHeight="0" >
 		<BorderPane minHeight="20" >
 			<center>
-				<TextField fx:id="taskTitle" id="title" />
+				<TextField fx:id="ctlTaskTitle" id="title" />
 			</center>
 			<right>
 				<MenuButton id="itemMenu">
@@ -33,7 +33,7 @@
 				</MenuButton>
 			</right>
 		</BorderPane>
-		<AnchorPane fx:id="subTaskList" id="subTaskList" minHeight="0.0"
+		<AnchorPane fx:id="ctlSubtaskList" id="subTaskList" minHeight="0.0"
 			minWidth="0.0" prefHeight="0">
 		</AnchorPane>
 	</VBox>

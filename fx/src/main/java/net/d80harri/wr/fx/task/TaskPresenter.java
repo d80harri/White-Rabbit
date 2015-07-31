@@ -17,51 +17,86 @@ import net.d80harri.wr.fx.tasklist.TaskListView;
 import net.d80harri.wr.model.Task;
 
 public class TaskPresenter implements Initializable {
+	// @formatter:off
+	@FXML private TextField ctlTaskTitle;
+	@FXML private AnchorPane ctlSubtaskList;
+	// @formatter:on
 
-	private StringProperty title = new SimpleStringProperty();
-	private ObservableList<Task> subTasks = FXCollections.observableArrayList();
+	private TaskListView viewTaskList;
+	private TaskListPresenter presTaskList;
 	
-	@FXML
-	private TextField taskTitle;
-	@FXML
-	private AnchorPane subTaskList;
-	
-	private Task task = new Task();
-	private TaskListView taskListView = new TaskListView();
-	private TaskListPresenter taskListPresenter;
-	
+	// ====== Model properties ======
+	private Task model;
+	private StringProperty modelTitle;
+	private ObservableList<Task> modelSubtasks;
+
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		taskListPresenter = (TaskListPresenter) taskListView.getPresenter();
+		this.model = new Task();
 		
-		this.title.bind(taskTitle.textProperty());
-		taskListPresenter.bind(subTasks);
-		
-		subTaskList.getChildren().add(taskListView.getView());
-		installTaskTitleListener();
+		initializeModel();
+		initializeViews();
+		initializeControls();
+
+		bindModelToControls();
+		bindViewsToModel();	
+		bindModelPropertiesToModel();
+	}
+	
+	private void initializeModel() {
+		this.modelTitle = new SimpleStringProperty();
+		this.modelSubtasks = FXCollections.observableArrayList();
+	}
+	
+	private void initializeViews() {
+		viewTaskList = new TaskListView();
+		presTaskList = (TaskListPresenter) viewTaskList.getPresenter();
+	}
+	
+	private void initializeControls() {
+		ctlSubtaskList.getChildren().add(viewTaskList.getView());
+	}
+	
+	private void bindModelToControls() {
+		this.modelTitle.bindBidirectional(ctlTaskTitle.textProperty());
+	}
+
+	private void bindViewsToModel() {
+		presTaskList.bind(modelSubtasks);
+	}
+
+	private void bindModelPropertiesToModel() {
+		modelTitle.addListener((obs, ov, nv) -> model.setTitle(nv));
 	}
 	
 	public Task getTask() {
-		return task;
+		return model;
 	}
 
-	private void installTaskTitleListener() {
-		title.addListener((obs, ov, nv) -> task.setTitle(nv));
+	public void setTask(Task task) {
+		this.model = task;
+		this.modelTitle.set(task.getTitle());
+		this.modelSubtasks.setAll(task.getTask());
 	}
-	
+
 	@FXML
 	private void debug(ActionEvent evt) {
-		System.out.println(task.getTitle());
-		for (Task t : task.getTask()) {
-			System.out.println(" " + t.getTitle());
+		System.out.println(model.hashCode() + " " + model.getTitle());
+		for (Task t : model.getTask()) {
+			System.out.println(" " + t.hashCode() + " " + t.getTitle());
 		}
 	}
-	
+
 	@FXML
 	private void addChild(ActionEvent evt) {
 		Task newTask = new Task();
-		task.getTask().add(newTask);
-		subTasks.add(newTask);
+		System.out.println("Adding task " + newTask.hashCode() + " to "
+				+ model.hashCode());
+		model.getTask().add(newTask);
+		modelSubtasks.add(newTask);
 	}
+
+
 
 }
