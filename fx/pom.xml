@@ -56,6 +56,11 @@
 			<version>1.6.0</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.fxmisc.easybind</groupId>
+			<artifactId>easybind</artifactId>
+			<version>1.0.3</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.testfx</groupId>

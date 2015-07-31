@@ -19,13 +19,13 @@ public class TaskViewTest extends ApplicationTest {
 		view = new TaskView();
 		presenter = (TaskPresenter) view.getPresenter();
 		
-		Scene scene = new Scene(view.getView(), 800, 600);
+		Scene scene = new Scene(view.getView(), 1000, 600);
         stage.setScene(scene);
         stage.show();
 	}
 	
 	@Test
-    public void should_drag_file_into_trashcan() {
+    public void writeToTextfieldUpdatesModel() {
 		clickOn("#title");
 		
 		write("My new Task");
@@ -36,5 +36,17 @@ public class TaskViewTest extends ApplicationTest {
 		write("My very new Task");
 		Assert.assertEquals("My very new Task", presenter.getTask().getTitle());
     }
+	
+	@Test
+	public void addingAChild() {
+		clickOn("#itemMenu");
+		clickOn("#addChild");
+		Assert.assertEquals(1, presenter.getTask().getTask().size());
+		
+		clickOn("#itemMenu");
+		clickOn("#addChild");
+		Assert.assertEquals(2, presenter.getTask().getTask().size());
+		
+	}
 
 }

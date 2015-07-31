@@ -12,6 +12,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         TaskView appView = new TaskView();
+//    	TaskListView appView = new TaskListView();
         Scene scene = new Scene(appView.getView());
         stage.setTitle("White rabbit v0.0.1");
 //        final String uri = getClass().getResource("app.css").toExternalForm();
