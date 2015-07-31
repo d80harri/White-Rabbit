@@ -5,6 +5,16 @@
 	<artifactId>fx</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<repositories>
+		<repository>
+			<id>maven-central-repo</id>
+			<url>http://repo1.maven.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<build>
 		<finalName>${jar.final.name}</finalName>
 		<plugins>
@@ -45,6 +55,19 @@
 			<artifactId>afterburner.fx</artifactId>
 			<version>1.6.0</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-core</artifactId>
+			<version>4.0.1-alpha</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-junit</artifactId>
+			<version>4.0.1-alpha</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
