@@ -8,6 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -113,10 +116,14 @@ public class AppPresenter implements Initializable {
 		if (file != null) { // TODO: Externalize -> ServiceMethod
 			JAXBContext context = JAXBContext.newInstance(WRFile.class);
 			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			if (!file.exists()) {
 				file.createNewFile();
 			}
 			marshaller.marshal(new JAXBElement<>(new QName("WhiteRabbit"), WRFile.class, model.get()), file);
+			
+			DebugBus.getInstance().fireDebugEvent(new DebugEvent("Wrote to file -> "));
+			DebugBus.getInstance().fireDebugEvent(new DebugEvent(new String(Files.readAllBytes(Paths.get(file.toURI())))));
 		}
 	}
 
