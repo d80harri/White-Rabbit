@@ -1,23 +1,18 @@
 package net.d80harri.wr.fx;
 
+import java.awt.MenuItem;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.layout.AnchorPane;
 import net.d80harri.wr.fx.debug.DebugPresenter;
 import net.d80harri.wr.fx.debug.DebugView;
 import net.d80harri.wr.fx.task.TaskPresenter;
 import net.d80harri.wr.fx.task.TaskView;
-import net.d80harri.wr.fx.tasklist.TaskListPresenter;
-import net.d80harri.wr.fx.tasklist.TaskListView;
-import net.d80harri.wr.model.Task;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import net.d80harri.wr.model.WRFile;
 
 public class AppPresenter implements Initializable {
 	//@formatter:off
@@ -30,6 +25,8 @@ public class AppPresenter implements Initializable {
 	
 	private TaskPresenter presTask;
 	private DebugPresenter presDebug;
+	
+	private WRFile model = new WRFile();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -40,6 +37,15 @@ public class AppPresenter implements Initializable {
 		bindModelToControls();
 		bindViewsToModel();
 		bindModelPropertiesToModel();
+	}
+	
+	public WRFile getModel() {
+		return model;
+	}
+	
+	public void setModel(WRFile model) {
+		this.model = model;
+		// TODO: bind
 	}
 
 	private void initializeModel() {
@@ -67,4 +73,8 @@ public class AppPresenter implements Initializable {
 	private void bindModelPropertiesToModel() {
 	}
 	
+	@FXML
+	private void saveFile(ActionEvent evt) {
+		
+	}
 }
