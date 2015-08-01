@@ -1,6 +1,7 @@
 package net.d80harri.wr.fx.task;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -19,6 +20,8 @@ import net.d80harri.wr.fx.tasklist.TaskListView;
 import net.d80harri.wr.model.Task;
 
 public class TaskPresenter implements Initializable {
+	private static final Task DEFAULT_TASK = new Task();
+	
 	// @formatter:off
 	@FXML private TextField ctlTaskTitle;
 	@FXML private AnchorPane ctlSubtaskList;
@@ -28,13 +31,13 @@ public class TaskPresenter implements Initializable {
 	private TaskListPresenter presTaskList;
 
 	// ====== Model properties ======
-	private Task model;
+	private Optional<Task> model = Optional.empty();
 	private StringProperty modelTitle;
 	private ObservableList<Task> modelSubtasks;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		this.model = new Task();
+		this.model = Optional.of(new Task());
 
 		initializeModel();
 		initializeViews();
@@ -68,27 +71,32 @@ public class TaskPresenter implements Initializable {
 	}
 
 	private void bindModelPropertiesToModel() {
-		modelTitle.addListener((obs, ov, nv) -> model.setTitle(nv));
+		modelTitle.addListener((obs, ov, nv) -> model.ifPresent(m -> m
+				.setTitle(nv)));
 	}
 
 	public Task getTask() {
-		return model;
+		return model.get();
 	}
 
 	public void setTask(Task task) {
-		this.model = task;
-		this.modelTitle.set(task.getTitle());
-		this.modelSubtasks.setAll(task.getTask());
+		this.model = Optional.ofNullable(task);
+		this.modelTitle.set(model.orElse(DEFAULT_TASK).getTitle());
+		this.modelSubtasks.setAll(model.orElse(DEFAULT_TASK).getTask());
 	}
 
 	@FXML
 	private void debug(ActionEvent evt) {
-		DebugBus.getInstance().fireDebugEvent(
-				new DebugEvent(model.hashCode() + " " + model.getTitle()));
-		for (Task t : model.getTask()) {
+		model.ifPresent(m -> {
 			DebugBus.getInstance().fireDebugEvent(
-					new DebugEvent(" " + t.hashCode() + " " + t.getTitle()));
-		}
+					new DebugEvent(model.hashCode() + " " + m.getTitle()));
+			for (Task t : m.getTask()) {
+				DebugBus.getInstance()
+						.fireDebugEvent(
+								new DebugEvent(" " + t.hashCode() + " "
+										+ t.getTitle()));
+			}
+		});
 	}
 
 	@FXML
@@ -97,7 +105,7 @@ public class TaskPresenter implements Initializable {
 		DebugBus.getInstance().fireDebugEvent(
 				new DebugEvent("Adding task " + newTask.hashCode() + " to "
 						+ model.hashCode()));
-		model.getTask().add(newTask);
+		model.get().getTask().add(newTask);
 		modelSubtasks.add(newTask);
 	}
 
