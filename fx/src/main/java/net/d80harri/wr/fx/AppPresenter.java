@@ -120,6 +120,24 @@ public class AppPresenter implements Initializable {
 			DebugBus.getInstance().fireDebugEvent(new DebugEvent(new String(Files.readAllBytes(Paths.get(file.toURI())))));
 		}
 	}
+	
+	@FXML
+	private void openFile(ActionEvent evt) throws JAXBException, IOException {
+		DebugBus.getInstance().fireDebugEvent(new DebugEvent("Reading from file -> "));
+//		File file = fileChooser.showSaveDialog(ctlTask.getScene().getWindow());
+//		if (file != null) { // TODO: Externalize -> ServiceMethod
+//			JAXBContext context = JAXBContext.newInstance(WRFile.class);
+//			Marshaller marshaller = context.createMarshaller();
+//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//			if (!file.exists()) {
+//				file.createNewFile();
+//			}
+//			marshaller.marshal(new JAXBElement<>(new QName("WhiteRabbit"), WRFile.class, model.get()), file);
+//			
+//			DebugBus.getInstance().fireDebugEvent(new DebugEvent("Wrote to file -> "));
+//			DebugBus.getInstance().fireDebugEvent(new DebugEvent(new String(Files.readAllBytes(Paths.get(file.toURI())))));
+//		}
+	}
 
 	@FXML
 	private void debug(ActionEvent evt) { // TODO: Externalize -> DebugUtils
