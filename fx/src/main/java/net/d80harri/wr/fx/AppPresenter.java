@@ -21,7 +21,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.transform.stream.StreamSource;
 
 import net.d80harri.wr.fx.debug.DebugBus;
 import net.d80harri.wr.fx.debug.DebugEvent;
@@ -124,19 +126,14 @@ public class AppPresenter implements Initializable {
 	@FXML
 	private void openFile(ActionEvent evt) throws JAXBException, IOException {
 		File file = fileChooser.showOpenDialog(ctlTask.getScene().getWindow());
-		if (file != null) { // TODO: Externalize -> ServiceMethod
+		if (file != null && file.exists()) { // TODO: Externalize -> ServiceMethod
 			DebugBus.getInstance().fireDebugEvent(new DebugEvent("Reading from file " + file.getAbsolutePath()));
 			
-//			JAXBContext context = JAXBContext.newInstance(WRFile.class);
-//			Marshaller marshaller = context.createMarshaller();
-//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//			if (!file.exists()) {
-//				file.createNewFile();
-//			}
-//			marshaller.marshal(new JAXBElement<>(new QName("WhiteRabbit"), WRFile.class, model.get()), file);
-//			
-//			DebugBus.getInstance().fireDebugEvent(new DebugEvent("Wrote to file -> "));
-//			DebugBus.getInstance().fireDebugEvent(new DebugEvent(new String(Files.readAllBytes(Paths.get(file.toURI())))));
+			JAXBContext context = JAXBContext.newInstance(WRFile.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+
+			JAXBElement<WRFile> model = unmarshaller.unmarshal(new StreamSource(file), WRFile.class);
+			setModel(model.getValue());
 		}
 	}
 
