@@ -5,7 +5,6 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
