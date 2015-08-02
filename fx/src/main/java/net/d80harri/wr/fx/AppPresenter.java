@@ -1,15 +1,12 @@
 package net.d80harri.wr.fx;
 
 import java.beans.XMLEncoder;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -24,10 +21,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
-
-import com.google.common.base.Charsets;
 
 import net.d80harri.wr.fx.debug.DebugBus;
 import net.d80harri.wr.fx.debug.DebugEvent;
