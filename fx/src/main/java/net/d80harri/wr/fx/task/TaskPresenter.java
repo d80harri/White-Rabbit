@@ -4,18 +4,24 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.animation.PauseTransition;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import net.d80harri.wr.fx.debug.DebugBus;
 import net.d80harri.wr.fx.debug.DebugEvent;
 import net.d80harri.wr.fx.tasklist.TaskListPresenter;
@@ -27,7 +33,7 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 public class TaskPresenter implements Initializable {
 	private static final Task DEFAULT_TASK = new Task();
-	
+
 	// @formatter:off
 	@FXML private TextField ctlTaskTitle;
 	@FXML private AnchorPane ctlSubtaskList;
@@ -44,6 +50,9 @@ public class TaskPresenter implements Initializable {
 	private StringProperty modelTitle;
 	private ObservableList<Task> modelSubtasks;
 
+	// ====== View properties ======
+	private BooleanProperty popupActive = new SimpleBooleanProperty();
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.model = Optional.of(new Task());
@@ -55,6 +64,26 @@ public class TaskPresenter implements Initializable {
 		bindModelToControls();
 		bindViewsToModel();
 		bindModelPropertiesToModel();
+		bindViewProperties();
+	}
+
+	private void bindViewProperties() {
+		popupActive.bind(ctlPopupContent.hoverProperty().or(
+				ctlMenuButton.hoverProperty()));
+		popupActive.addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable,
+					Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+					if (!ctlPopOver.isShowing())
+						ctlPopOver.show(ctlMenuButton);
+				} else {
+					if (ctlPopOver.isShowing())
+						closePopupIfNecessary();
+				}
+			}
+		});
 	}
 
 	private void initializeModel() {
@@ -120,22 +149,16 @@ public class TaskPresenter implements Initializable {
 		modelSubtasks.add(newTask);
 	}
 	
-	@FXML
-	private void openContextMenu(MouseEvent evt) {
-		ctlPopOver.show(ctlMenuButton);
+	private void closePopupIfNecessary() {
+		PauseTransition delay = new PauseTransition(Duration.millis(300));
+		delay.setOnFinished(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+					ctlPopOver.hide();
+			}
+		});
+		delay.play();
 	}
 
-	@FXML
-	private void closeContextMenu(MouseEvent evt) {
-		// TODO: Execute the following task after 0.3 sec
-		javafx.concurrent.Task<Void> t = new javafx.concurrent.Task<Void>() {
-			
-			@Override
-			protected Void call() throws Exception {
-				// Do only hide if mouse not over popup
-				ctlPopOver.hide();
-				return null;
-			}
-		};
-	}
 }
