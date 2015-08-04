@@ -34,29 +34,19 @@
 				promptText="What do you want to do?" />
 		</center>
 		<left>
-			<MenuButton id="itemMenu" maxWidth="20">
-				<items>
-					<MenuItem text="Add child" onAction="#addChild" id="addChild" />
-					<MenuItem text="Debug" onAction="#debug" />
-				</items>
-			</MenuButton>
-			<ScrollPane  >
-				<content>
+			<VBox id="popupContent" fx:id="ctlPopupContent">
+				<Button text="Add child" onAction="#addChild" id="addChild" maxWidth="Infinity" />
+				<Button text="Debug" onAction="#debug"  maxWidth="Infinity" />
+			</VBox>
+			<Button fx:id="ctlMenuButton" onMouseEntered="#openContextMenu" onMouseExited="#closeContextMenu">
+				<graphic>
 					<ImageView fitHeight="20" fitWidth="20">
 						<image>
 							<Image url="file:src\main\resources\icons\drag.png" />
 						</image>
 					</ImageView>
-				</content>
-				<contextMenu>
-					<ContextMenu>
-						<items>
-							<MenuItem text="Add child" onAction="#addChild" id="addChild" />
-							<MenuItem text="Debug" onAction="#debug" />
-						</items>
-					</ContextMenu>
-				</contextMenu>
-			</ScrollPane>
+				</graphic>
+			</Button>
 		</left>
 		<bottom>
 			<AnchorPane fx:id="ctlSubtaskList" id="subTaskList"

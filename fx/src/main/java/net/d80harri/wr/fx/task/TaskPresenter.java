@@ -11,13 +11,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import net.d80harri.wr.fx.debug.DebugBus;
 import net.d80harri.wr.fx.debug.DebugEvent;
 import net.d80harri.wr.fx.tasklist.TaskListPresenter;
 import net.d80harri.wr.fx.tasklist.TaskListView;
 import net.d80harri.wr.model.Task;
+
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
 
 public class TaskPresenter implements Initializable {
 	private static final Task DEFAULT_TASK = new Task();
@@ -25,7 +31,10 @@ public class TaskPresenter implements Initializable {
 	// @formatter:off
 	@FXML private TextField ctlTaskTitle;
 	@FXML private AnchorPane ctlSubtaskList;
+	@FXML private Pane ctlPopupContent;
+	@FXML private Button ctlMenuButton;
 	// @formatter:on
+	private PopOver ctlPopOver;
 
 	private TaskListView viewTaskList;
 	private TaskListPresenter presTaskList;
@@ -59,6 +68,8 @@ public class TaskPresenter implements Initializable {
 	}
 
 	private void initializeControls() {
+		ctlPopOver = new PopOver(ctlPopupContent);
+		ctlPopOver.setArrowLocation(ArrowLocation.TOP_LEFT);
 		ctlSubtaskList.getChildren().add(viewTaskList.getView());
 	}
 
@@ -108,5 +119,23 @@ public class TaskPresenter implements Initializable {
 		model.get().getTask().add(newTask);
 		modelSubtasks.add(newTask);
 	}
+	
+	@FXML
+	private void openContextMenu(MouseEvent evt) {
+		ctlPopOver.show(ctlMenuButton);
+	}
 
+	@FXML
+	private void closeContextMenu(MouseEvent evt) {
+		// TODO: Execute the following task after 0.3 sec
+		javafx.concurrent.Task<Void> t = new javafx.concurrent.Task<Void>() {
+			
+			@Override
+			protected Void call() throws Exception {
+				// Do only hide if mouse not over popup
+				ctlPopOver.hide();
+				return null;
+			}
+		};
+	}
 }
