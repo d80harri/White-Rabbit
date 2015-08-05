@@ -50,9 +50,6 @@ public class TaskPresenter implements Initializable {
 	private StringProperty modelTitle;
 	private ObservableList<Task> modelSubtasks;
 
-	// ====== View properties ======
-	private BooleanProperty popupActive = new SimpleBooleanProperty();
-
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.model = Optional.of(new Task());
@@ -64,26 +61,6 @@ public class TaskPresenter implements Initializable {
 		bindModelToControls();
 		bindViewsToModel();
 		bindModelPropertiesToModel();
-		bindViewProperties();
-	}
-
-	private void bindViewProperties() {
-		popupActive.bind(ctlPopupContent.hoverProperty().or(
-				ctlMenuButton.hoverProperty()));
-		popupActive.addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable,
-					Boolean oldValue, Boolean newValue) {
-				if (newValue) {
-					if (!ctlPopOver.isShowing())
-						ctlPopOver.show(ctlMenuButton);
-				} else {
-					if (ctlPopOver.isShowing())
-						closePopupIfNecessary();
-				}
-			}
-		});
 	}
 
 	private void initializeModel() {
@@ -149,16 +126,9 @@ public class TaskPresenter implements Initializable {
 		modelSubtasks.add(newTask);
 	}
 	
-	private void closePopupIfNecessary() {
-		PauseTransition delay = new PauseTransition(Duration.millis(300));
-		delay.setOnFinished(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-					ctlPopOver.hide();
-			}
-		});
-		delay.play();
+	@FXML
+	private void showPopupMenu(ActionEvent evt) {
+		this.ctlPopOver.show(this.ctlMenuButton);
 	}
 
 }

@@ -34,11 +34,11 @@
 				promptText="What do you want to do?" />
 		</center>
 		<left>
-			<VBox id="popupContent" fx:id="ctlPopupContent" hover="${mouseOverPopupContent}">
+			<VBox id="popupContent" fx:id="ctlPopupContent" >
 				<Button text="Add child" onAction="#addChild" id="addChild" maxWidth="Infinity" />
 				<Button text="Debug" onAction="#debug"  maxWidth="Infinity" />
 			</VBox>
-			<Button fx:id="ctlMenuButton" hover="${presenter.mouseOverMenuButton}">
+			<Button fx:id="ctlMenuButton" onAction="#showPopupMenu">
 				<graphic>
 					<ImageView fitHeight="20" fitWidth="20">
 						<image>
