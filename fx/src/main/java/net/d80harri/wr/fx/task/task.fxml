@@ -25,10 +25,11 @@
 
 <AnchorPane id="AnchorPane" AnchorPane.leftAnchor="0.0"
 	AnchorPane.rightAnchor="0.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.d80harri.wr.fx.task.TaskPresenter">
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.d80harri.wr.fx.task.TaskPresenter" fx:id="ctlContainer">
 	<BorderPane minHeight="20" AnchorPane.bottomAnchor="0.0"
 		AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-		AnchorPane.topAnchor="0.0">
+		AnchorPane.topAnchor="0.0"
+		onDragOver="#draggedOver">
 		<center>
 			<TextField fx:id="ctlTaskTitle" id="title"
 				promptText="What do you want to do?" />
@@ -38,7 +39,7 @@
 				<Button text="Add child" onAction="#addChild" id="addChild" maxWidth="Infinity" />
 				<Button text="Debug" onAction="#debug"  maxWidth="Infinity" />
 			</VBox>
-			<Button fx:id="ctlMenuButton" onAction="#showPopupMenu">
+			<Button fx:id="ctlMenuButton" onAction="#showPopupMenu" onDragDetected="#taskDragDetected">
 				<graphic>
 					<ImageView fitHeight="20" fitWidth="20">
 						<image>
