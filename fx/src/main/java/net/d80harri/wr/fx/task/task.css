@@ -1,3 +1,9 @@
 #subTaskList {
 	-fx-padding: 0 0 0 10;
 }
+
+.dragbox-detail-visible {
+	-fx-border-width: 5px;
+	-fx-border-color: black;
+	-fx-border-style: dotted;
+}

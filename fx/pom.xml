@@ -46,7 +46,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.d80harri.wr</groupId>
-			<artifactId>model</artifactId>
+			<artifactId>service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 

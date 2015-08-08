@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
@@ -40,6 +41,9 @@ public class TaskPresenter implements Initializable {
 	@FXML private Pane ctlPopupContent;
 	@FXML private Button ctlMenuButton;
 	@FXML private AnchorPane ctlDragBox;
+	@FXML private Pane ctlBeforeDragBox;
+	@FXML private Pane ctlAfterDragBox;
+	@FXML private Pane ctlChildDragBox;
 	// @formatter:on
 	private PopOver ctlPopOver;
 
@@ -149,15 +153,42 @@ public class TaskPresenter implements Initializable {
 	@FXML
 	private void setDragBoxVisible(DragEvent evt) {
 		DebugBus.getInstance().fireDebugEvent(
-				new DebugEvent("Showing dragbox of task " + this.model.get().getTitle()));
+				new DebugEvent("Showing dragbox of task "
+						+ this.model.get().getTitle()));
 		ctlDragBox.setVisible(true);
 	}
 
 	@FXML
 	private void setDragBoxInvisible(DragEvent evt) {
 		DebugBus.getInstance().fireDebugEvent(
-				new DebugEvent("Hiding dragbox of task " + this.model.get().getTitle()));
+				new DebugEvent("Hiding dragbox of task "
+						+ this.model.get().getTitle()));
 		this.ctlDragBox.setVisible(false);
+	}
+
+	@FXML
+	private void dragOverOnDragBoxItem(DragEvent evt) {
+		Node sourceNode = (Node) evt.getSource();
+		sourceNode.getStyleClass().add("dragbox-detail-visible");
+		DebugBus.getInstance().fireDebugEvent(
+				new DebugEvent("Dragging over bevor of task "
+						+ this.model.get().getTitle()));
+
+		evt.acceptTransferModes(TransferMode.MOVE);
+		evt.consume();
+	}
+
+	@FXML
+	private void dragExitOnDragBoxItem(DragEvent evt) {
+		Node sourceNode = (Node) evt.getSource();
+		sourceNode.getStyleClass().removeAll("dragbox-detail-visible");
+		
+		evt.consume();
+	}
+	
+	@FXML
+	private void dragDroppedOnDragBoxItem(DragEvent event) {
+
 	}
 
 }

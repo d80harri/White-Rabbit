@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.control.ScrollPane?>
 
-<AnchorPane id="AnchorPane" AnchorPane.leftAnchor="0.0"
+<AnchorPane id="AnchorPane" AnchorPane.leftAnchor="0.0" 
 	AnchorPane.rightAnchor="0.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.d80harri.wr.fx.task.TaskPresenter"
 	fx:id="ctlContainer">
@@ -53,15 +53,21 @@
 				AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0" AnchorPane.bottomAnchor="-1.0"
 				visible="false"
 				onDragExited="#setDragBoxInvisible">
-				<Pane id="before" prefHeight="15" prefWidth="100" 
-					style="-fx-background-color:red"/>
-				<Pane id="after" prefHeight="15" prefWidth="100"
+				<Pane id="before" fx:id="ctlBeforeDragBox" prefHeight="15" prefWidth="100" 
+					onDragOver="#dragOverOnDragBoxItem"
+					onDragExited="#dragExitOnDragBoxItem"
+					onDragDropped="#dragDroppedOnDragBoxItem"/>
+				<Pane id="after" fx:id="ctlAfterDragBox" prefHeight="15" prefWidth="100"
 					AnchorPane.bottomAnchor="0" 
-					style="-fx-background-color:green"/>
-				<Pane id="child" AnchorPane.leftAnchor="15"
+					onDragOver="#dragOverOnDragBoxItem"
+					onDragExited="#dragExitOnDragBoxItem"
+					onDragDropped="#dragDroppedOnDragBoxItem"/>
+				<Pane id="child" fx:id="ctlChildDragBox" AnchorPane.leftAnchor="100"
 					AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"
 					AnchorPane.bottomAnchor="0" 
-					style="-fx-background-color:yellow"/>
+					onDragOver="#dragOverOnDragBoxItem"
+					onDragExited="#dragExitOnDragBoxItem"
+					onDragDropped="#dragDroppedOnDragBoxItem"/>
 			</AnchorPane>
 		</AnchorPane>
 		<AnchorPane fx:id="ctlSubtaskList" id="subTaskList"

@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
+import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -33,6 +34,7 @@ import net.d80harri.wr.fx.task.TaskPresenter;
 import net.d80harri.wr.fx.task.TaskView;
 import net.d80harri.wr.model.Task;
 import net.d80harri.wr.model.WRFile;
+import net.d80harri.wr.service.WrService;
 
 public class AppPresenter implements Initializable {
 	private static final WRFile DEFAULT_MODEL;
@@ -41,6 +43,9 @@ public class AppPresenter implements Initializable {
 		DEFAULT_MODEL = new WRFile();
 		DEFAULT_MODEL.setTask(new Task());
 	}
+	
+	@Inject
+	private WrService service;
 
 	//@formatter:off
 	@FXML private AnchorPane ctlTask;
@@ -66,15 +71,15 @@ public class AppPresenter implements Initializable {
 		bindModelToControls();
 		bindViewsToModel();
 		bindModelPropertiesToModel();
-		this.setModel(DEFAULT_MODEL);
+		this.setModel(Optional.of(DEFAULT_MODEL));
 	}
 
-	public WRFile getModel() {
-		return model.orElse(null);
+	public Optional<WRFile> getModel() {
+		return model;
 	}
 
-	public void setModel(WRFile model) {
-		this.model = Optional.ofNullable(model);
+	public void setModel(Optional<WRFile> model) {
+		this.model = model;
 
 		this.presTask.setTask(this.model.orElse(DEFAULT_MODEL).getTask());
 	}
@@ -110,13 +115,7 @@ public class AppPresenter implements Initializable {
 	private void saveFile(ActionEvent evt) throws JAXBException, IOException {
 		File file = fileChooser.showSaveDialog(ctlTask.getScene().getWindow());
 		if (file != null) { // TODO: Externalize -> ServiceMethod
-			JAXBContext context = JAXBContext.newInstance(WRFile.class);
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			marshaller.marshal(new JAXBElement<>(new QName("WhiteRabbit"), WRFile.class, model.get()), file);
+			service.store(file);
 			
 			DebugBus.getInstance().fireDebugEvent(new DebugEvent("Wrote to file -> "));
 			DebugBus.getInstance().fireDebugEvent(new DebugEvent(new String(Files.readAllBytes(Paths.get(file.toURI())))));
@@ -129,11 +128,8 @@ public class AppPresenter implements Initializable {
 		if (file != null && file.exists()) { // TODO: Externalize -> ServiceMethod
 			DebugBus.getInstance().fireDebugEvent(new DebugEvent("Reading from file " + file.getAbsolutePath()));
 			
-			JAXBContext context = JAXBContext.newInstance(WRFile.class);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-
-			JAXBElement<WRFile> model = unmarshaller.unmarshal(new StreamSource(file), WRFile.class);
-			setModel(model.getValue());
+			service.load(file);
+			setModel(service.getData());
 		}
 	}
 
