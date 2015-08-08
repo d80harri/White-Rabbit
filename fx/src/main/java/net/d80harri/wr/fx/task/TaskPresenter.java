@@ -39,6 +39,7 @@ public class TaskPresenter implements Initializable {
 	@FXML private AnchorPane ctlSubtaskList;
 	@FXML private Pane ctlPopupContent;
 	@FXML private Button ctlMenuButton;
+	@FXML private AnchorPane ctlDragBox;
 	// @formatter:on
 	private PopOver ctlPopOver;
 
@@ -146,23 +147,17 @@ public class TaskPresenter implements Initializable {
 	}
 
 	@FXML
-	private void draggedOver(DragEvent evt) {
-		/* data is dragged over the target */
-		/*
-		 * accept it only if it is not dragged from the same node and if it has
-		 * a string data
-		 */
+	private void setDragBoxVisible(DragEvent evt) {
+		DebugBus.getInstance().fireDebugEvent(
+				new DebugEvent("Showing dragbox of task " + this.model.get().getTitle()));
+		ctlDragBox.setVisible(true);
+	}
 
-		if (evt.getDragboard().hasString()) {
-			Object content = DragboardReferences.INSTANCE.get(evt
-					.getDragboard().getString());
-			if (content instanceof Task) {
-				/* allow for both copying and moving, whatever user chooses */
-				evt.acceptTransferModes(TransferMode.MOVE);
-			}
-		}
-
-		evt.consume();
+	@FXML
+	private void setDragBoxInvisible(DragEvent evt) {
+		DebugBus.getInstance().fireDebugEvent(
+				new DebugEvent("Hiding dragbox of task " + this.model.get().getTitle()));
+		this.ctlDragBox.setVisible(false);
 	}
 
 }
