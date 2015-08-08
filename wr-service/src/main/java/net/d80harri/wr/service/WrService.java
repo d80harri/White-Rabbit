@@ -12,10 +12,12 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
+import net.d80harri.wr.model.Task;
 import net.d80harri.wr.model.WRFile;
 
 public class WrService {
 	private Optional<WRFile> data = Optional.empty();
+	private Long maxId = null;
 
 	public Optional<WRFile> getData() {
 		return data;
@@ -42,4 +44,89 @@ public class WrService {
 		}
 		marshaller.marshal(new JAXBElement<>(new QName("WhiteRabbit"), WRFile.class, data.get()), file);
 	}
+
+	public void moveTaskBefore(long toMoveId, long targetId) {
+		Task toMove = this.selectTask(toMoveId).get();
+		Task target = this.selectTask(targetId).get();
+		Task parentOfToMove = this.selectParentTaskOf(toMove.getId()).get();
+		Task parentOfTarget = this.selectParentTaskOf(target.getId()).get();
+		
+		int idxOfTarget = target.getTask().indexOf(target);
+		
+		parentOfToMove.getTask().remove(toMove);
+		parentOfTarget.getTask().add(idxOfTarget, toMove);
+	}
+
+	public void moveTaskAfter(long toMoveId, long targetId) {
+		Task toMove = this.selectTask(toMoveId).get();
+		Task target = this.selectTask(targetId).get();
+		Task parentOfToMove = this.selectParentTaskOf(toMove.getId()).get();
+		Task parentOfTarget = this.selectParentTaskOf(target.getId()).get();
+		
+		int idxOfTarget = target.getTask().indexOf(target);
+		
+		parentOfToMove.getTask().remove(toMove);
+		parentOfTarget.getTask().add(idxOfTarget+1, toMove);
+	}
+
+	public void moveTaskToChildren(long toMoveId, long targetId) {
+		Task toMove = this.selectTask(toMoveId).get();
+		Task target = this.selectTask(targetId).get();
+		Task parentOfToMove = this.selectParentTaskOf(toMove.getId()).get();
+		
+		parentOfToMove.getTask().remove(toMove);
+		target.getTask().add(toMove);
+	}
+
+	private Optional<Task> selectParentTaskOf(long id) {
+		return Optional.ofNullable(selectParentTaskOf(this.data.get().getTask(), id));
+	}
+
+	public Optional<Task> selectTask(long id) {
+		return Optional.ofNullable(selectTask(this.data.get().getTask(), id));
+	}
+	
+	private Task selectParentTaskOf(Task node, long id) {
+		if(node.getTask().stream().filter(i -> i.getId() == id).count() >= 1) {
+			return node;
+		} else {
+			for (Task t : node.getTask()) {
+				Task subResult = selectParentTaskOf(t, id);
+				if (subResult != null)
+					return  subResult;
+			}
+		}
+		return null;
+	}
+	
+	private Task selectTask(Task node, long id) {
+		if (node.getId() == id) {
+			return node;
+		} else {
+			for (Task t : node.getTask()) {
+				Task subResult = selectTask(t, id);
+				if (subResult != null) {
+					return  subResult;
+				}
+			}
+		}
+		return null;
+	}
+
+	public void insert(Task newTask) {
+		newTask.setId(getMaxId());
+	}
+	
+	private long getMaxId() {
+		return getMaxId(this.data.get().getTask(), 0);
+	}
+	
+	private long getMaxId(Task task, long currentMax) {
+		long result = Math.max(task.getId(), currentMax);
+		for (Task sub : task.getTask()) {
+			result = getMaxId(sub, currentMax);
+		}
+		return result;
+	}
+
 }

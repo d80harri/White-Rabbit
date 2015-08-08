@@ -21,18 +21,25 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+
+import javax.inject.Inject;
+
 import net.d80harri.wr.fx.debug.DebugBus;
 import net.d80harri.wr.fx.debug.DebugEvent;
 import net.d80harri.wr.fx.tasklist.TaskListPresenter;
 import net.d80harri.wr.fx.tasklist.TaskListView;
-import net.d80harri.wr.fx.utils.DragboardReferences;
+import net.d80harri.wr.fx.utils.DataFormats;
 import net.d80harri.wr.model.Task;
+import net.d80harri.wr.service.WrService;
 
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 
 public class TaskPresenter implements Initializable {
 	private static final Task DEFAULT_TASK = new Task();
+
+	@Inject
+	private WrService service;
 
 	// @formatter:off
 	@FXML private AnchorPane ctlContainer;
@@ -124,6 +131,7 @@ public class TaskPresenter implements Initializable {
 	@FXML
 	private void addChild(ActionEvent evt) {
 		Task newTask = new Task();
+		service.insert(newTask);
 		DebugBus.getInstance().fireDebugEvent(
 				new DebugEvent("Adding task " + newTask.hashCode() + " to "
 						+ model.hashCode()));
@@ -144,7 +152,7 @@ public class TaskPresenter implements Initializable {
 
 		/* Put a string on a dragboard */
 		ClipboardContent content = new ClipboardContent();
-		content.putString(DragboardReferences.INSTANCE.register(model.get()));
+		content.put(DataFormats.TASK_ID, model.get().getId());
 		db.setContent(content);
 
 		evt.consume();
@@ -171,7 +179,7 @@ public class TaskPresenter implements Initializable {
 		Node sourceNode = (Node) evt.getSource();
 		sourceNode.getStyleClass().add("dragbox-detail-visible");
 		DebugBus.getInstance().fireDebugEvent(
-				new DebugEvent("Dragging over bevor of task "
+				new DebugEvent("Dragging dragbox of task "
 						+ this.model.get().getTitle()));
 
 		evt.acceptTransferModes(TransferMode.MOVE);
@@ -182,12 +190,40 @@ public class TaskPresenter implements Initializable {
 	private void dragExitOnDragBoxItem(DragEvent evt) {
 		Node sourceNode = (Node) evt.getSource();
 		sourceNode.getStyleClass().removeAll("dragbox-detail-visible");
-		
+
 		evt.consume();
 	}
-	
+
 	@FXML
 	private void dragDroppedOnDragBoxItem(DragEvent event) {
+		/* data dropped */
+		/* if there is a string data on dragboard, read it and use it */
+		Dragboard db = event.getDragboard();
+		boolean success = false;
+		if (db.hasContent(DataFormats.TASK_ID)) {
+			long toMoveTaskId = (long)db.getContent(DataFormats.TASK_ID);
+			try {
+				if (event.getSource() == ctlBeforeDragBox) {
+					service.moveTaskBefore(toMoveTaskId, this.getTask().getId());
+				} else if (event.getSource() == ctlAfterDragBox) {
+					service.moveTaskAfter(toMoveTaskId, this.getTask().getId());
+				} else if (event.getSource() == ctlChildDragBox) {
+					service.moveTaskToChildren(toMoveTaskId, this.getTask().getId());
+					modelSubtasks.add(service.selectTask(toMoveTaskId).get());
+				}
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			success = true;
+		}
+		/*
+		 * let the source know whether the string was successfully transferred
+		 * and used
+		 */
+		event.setDropCompleted(success);
+
+		event.consume();
 
 	}
 

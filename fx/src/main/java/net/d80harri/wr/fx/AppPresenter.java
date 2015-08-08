@@ -114,7 +114,7 @@ public class AppPresenter implements Initializable {
 	@FXML
 	private void saveFile(ActionEvent evt) throws JAXBException, IOException {
 		File file = fileChooser.showSaveDialog(ctlTask.getScene().getWindow());
-		if (file != null) { // TODO: Externalize -> ServiceMethod
+		if (file != null) { 
 			service.store(file);
 			
 			DebugBus.getInstance().fireDebugEvent(new DebugEvent("Wrote to file -> "));
@@ -125,7 +125,7 @@ public class AppPresenter implements Initializable {
 	@FXML
 	private void openFile(ActionEvent evt) throws JAXBException, IOException {
 		File file = fileChooser.showOpenDialog(ctlTask.getScene().getWindow());
-		if (file != null && file.exists()) { // TODO: Externalize -> ServiceMethod
+		if (file != null && file.exists()) { 
 			DebugBus.getInstance().fireDebugEvent(new DebugEvent("Reading from file " + file.getAbsolutePath()));
 			
 			service.load(file);
