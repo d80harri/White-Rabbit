@@ -16,7 +16,7 @@ import net.d80harri.wr.model.Task;
 import net.d80harri.wr.model.WRFile;
 
 public class WrService {
-	private Optional<WRFile> data = Optional.empty();
+	private Optional<WRFile> data = Optional.of(new WRFile());
 	private Long maxId = null;
 
 	public Optional<WRFile> getData() {
@@ -113,11 +113,13 @@ public class WrService {
 		return null;
 	}
 
-	public void insert(Task newTask) {
+	public Task insert(Task newTask) {
 		newTask.setId(getMaxId());
+		return newTask;
 	}
 	
 	private long getMaxId() {
+		if (this.data.get().getTask() == null) return 0;
 		return getMaxId(this.data.get().getTask(), 0);
 	}
 	

@@ -34,7 +34,8 @@
 				AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
 				<left>
 					<Button fx:id="ctlMenuButton" onAction="#showPopupMenu"
-						onDragDetected="#taskDragDetected">
+						onDragDetected="#taskDragDetected"
+						onDragDone="#taskDragDone">
 						<graphic>
 							<ImageView fitHeight="20" fitWidth="20">
 								<image>

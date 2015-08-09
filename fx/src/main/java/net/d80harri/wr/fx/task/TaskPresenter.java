@@ -60,11 +60,10 @@ public class TaskPresenter implements Initializable {
 	// ====== Model properties ======
 	private Optional<Task> model = Optional.empty();
 	private StringProperty modelTitle;
-	private ObservableList<Task> modelSubtasks;
-
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		this.model = Optional.of(new Task());
+		this.model = Optional.of(service.insert(new Task()));
 
 		initializeModel();
 		initializeViews();
@@ -77,7 +76,6 @@ public class TaskPresenter implements Initializable {
 
 	private void initializeModel() {
 		this.modelTitle = new SimpleStringProperty();
-		this.modelSubtasks = FXCollections.observableArrayList();
 	}
 
 	private void initializeViews() {
@@ -96,7 +94,6 @@ public class TaskPresenter implements Initializable {
 	}
 
 	private void bindViewsToModel() {
-		presTaskList.bind(modelSubtasks);
 	}
 
 	private void bindModelPropertiesToModel() {
@@ -111,7 +108,7 @@ public class TaskPresenter implements Initializable {
 	public void setTask(Task task) {
 		this.model = Optional.ofNullable(task);
 		this.modelTitle.set(model.orElse(DEFAULT_TASK).getTitle());
-		this.modelSubtasks.setAll(model.orElse(DEFAULT_TASK).getTask());
+		this.presTaskList.replaceTasks(model.orElse(DEFAULT_TASK).getTask());
 	}
 
 	@FXML
@@ -136,7 +133,7 @@ public class TaskPresenter implements Initializable {
 				new DebugEvent("Adding task " + newTask.hashCode() + " to "
 						+ model.hashCode()));
 		model.get().getTask().add(newTask);
-		modelSubtasks.add(newTask);
+		this.presTaskList.add(newTask);
 	}
 
 	@FXML
@@ -209,7 +206,7 @@ public class TaskPresenter implements Initializable {
 					service.moveTaskAfter(toMoveTaskId, this.getTask().getId());
 				} else if (event.getSource() == ctlChildDragBox) {
 					service.moveTaskToChildren(toMoveTaskId, this.getTask().getId());
-					modelSubtasks.add(service.selectTask(toMoveTaskId).get());
+					presTaskList.add(service.selectTask(toMoveTaskId).get()); // TODO: add presenter and not task
 				}
 			} catch (Throwable e) {
 				// TODO Auto-generated catch block
@@ -224,7 +221,14 @@ public class TaskPresenter implements Initializable {
 		event.setDropCompleted(success);
 
 		event.consume();
-
+	}
+	
+	@FXML
+	private void taskDragDone(DragEvent event) {
+		Dragboard db = event.getDragboard();
+		if (db.hasContent(DataFormats.TASK_ID)) {
+			// TODO: remove this from parent
+		}
 	}
 
 }

@@ -1,7 +1,9 @@
 package net.d80harri.wr.fx.tasklist;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import org.fxmisc.easybind.EasyBind;
 
@@ -12,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import net.d80harri.wr.fx.task.TaskPresenter;
 import net.d80harri.wr.fx.task.TaskView;
 import net.d80harri.wr.fx.utils.MappedList;
 import net.d80harri.wr.model.Task;
@@ -21,27 +22,46 @@ public class TaskListPresenter implements Initializable {
 	@FXML
 	private VBox items;
 	
-	private ObservableList<Task> taskList = FXCollections.observableArrayList();
-	private ObservableList<Node> taskViewList = new MappedList<Node, Task>(taskList, this::convert);
+	private ObservableList<TaskView> taskList = FXCollections.observableArrayList();
+	private ObservableList<Node> mappedList = new MappedList<Node, TaskView>(taskList, i -> i.getView());
  
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		EasyBind.listBind(items.getChildren(), mappedList);
 	}
 	
-	public void bind(ObservableList<Task> tasks) {
-		EasyBind.listBind(taskList, tasks);
-		EasyBind.listBind(items.getChildren(), taskViewList);
+	public List<TaskView> getTaskViews() {
+		return taskList;
 	}
 	
-	private Node convert(Task task) {
+	public void setAll(List<TaskView> tasks) {
+		taskList.clear();
+		taskList.addAll(tasks);
+	}
+	
+	public void replaceTasks(List<Task> task) {
+		setAll(task.stream().map(this::convertTask2TaskView).collect(Collectors.toList()));
+	}
+	
+	public void add(TaskView task) {
+		taskList.add(task);
+	}
+
+	public void add(Task newTask) {
+		this.add(convertTask2TaskView(newTask));
+	}
+	
+	private TaskView convertTask2TaskView(Task task) {
 		TaskView view = new TaskView();
-		((TaskPresenter)view.getPresenter()).setTask(task);
-		return view.getView();
+		view.getPresenter().setTask(task);
+		return view;
 	}
 	
 	@FXML
 	private void debug() {
 		items.getChildren().add(new Text("TEST"));
 	}
+
+
+
 }
