@@ -17,7 +17,5 @@
 
 <AnchorPane id="TaskList" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.d80harri.wr.fx.tasklist.TaskListPresenter">
-	<VBox fx:id="items" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-		<Button text="Debug" onAction="#debug" />
-	</VBox>
+	<VBox fx:id="items" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
 </AnchorPane>
